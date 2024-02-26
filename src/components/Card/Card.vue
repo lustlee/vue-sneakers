@@ -1,20 +1,22 @@
 <script setup>
+
 defineProps({
+  id: Number,
   imageUrl: String,
   title: String,
   price: Number,
   isFavorite: Boolean,
   isAdded: Boolean,
-  onClickAdd: Function,
   onClickFavorite: Function,
-});
-
+  onClickAdd: Function,
+})
 </script>
 
 
 <template>
   <div>
-    <div class="relative bg-white border border-slate-100 rounded-3xl p-8 cursor-pointer transition hover:-translate-y-2 hover:shadow-xl">
+    <div
+      class="relative bg-white border border-slate-100 rounded-3xl p-8 cursor-pointer transition hover:-translate-y-2 hover:shadow-xl">
 
       <img
         :src="!isFavorite ? '/like-1.svg' : '/like-2.svg'"
