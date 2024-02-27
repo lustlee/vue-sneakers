@@ -1,6 +1,17 @@
 <script setup>
 import DrawerHead from './DrawerHead.vue'
 import CartItemList from '@/components/Cart/CartItemList.vue'
+import InfoBlock from '@/components/InfoBlock/InfoBlock.vue'
+
+const emit = defineEmits(['createOrder']);
+
+defineProps({
+  totalPrice: Number,
+  vatPrice: Number,
+  buttonDisabled: Boolean
+})
+
+
 </script>
 
 <template>
@@ -8,26 +19,42 @@ import CartItemList from '@/components/Cart/CartItemList.vue'
   <div class="bg-white w-96 h-full fixed right-0 top-0 z-20 p-8">
     <DrawerHead />
 
-    <CartItemList />
+    <div v-if="!totalPrice" class="flex h-full items-center">
+      <InfoBlock
+        title="Корзина пустая"
+        description="Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."
+        image-url="/package-icon.png"
+      />
+    </div>
 
-    <div class="flex flex-col gap-4 mt-7">
-      <div  class="flex gap-2">
-        <span>Итого:</span>
-        <div class="flex-1 border-b border-dashed"></div>
-        <b>12990 сом</b>
-      </div>
-      <div  class="flex gap-2">
-        <span>Налог 5%:</span>
-        <div class="flex-1 border-b border-dashed"></div>
-        <b>900 сом</b>
-      </div>
+    <div v-else>
+      <CartItemList />
 
-      <button
-        disabled=""
-        class="mt-4 bg-lime-500 w-full rounded-xl py-3 text-white disabled:bg-slate-300 hover:bg-lime-600 transition active:bg-lime-700 cursor-pointer"
-      >
-        Оформить заказ
-      </button>
+      <div class="flex flex-col gap-4 mt-7">
+        <div  class="flex gap-2">
+          <span>Сумма:</span>
+          <div class="flex-1 border-b border-dashed"></div>
+          <b>{{ totalPrice }} сом</b>
+        </div>
+        <div  class="flex gap-2">
+          <span>Налог 5%:</span>
+          <div class="flex-1 border-b border-dashed"></div>
+          <b>{{ vatPrice }} сом</b>
+        </div>
+        <div  class="flex gap-2">
+          <span>Итог:</span>
+          <div class="flex-1 border-b border-dashed"></div>
+          <b>{{ totalPrice + vatPrice }} сом</b>
+        </div>
+
+        <button
+          :disabled="buttonDisabled"
+          class="mt-4 bg-lime-500 w-full rounded-xl py-3 text-white disabled:bg-slate-300 hover:bg-lime-600 transition active:bg-lime-700 cursor-pointer"
+          @click="() => emit('createOrder')"
+        >
+          Оформить заказ
+        </button>
+      </div>
     </div>
   </div>
 </template>
